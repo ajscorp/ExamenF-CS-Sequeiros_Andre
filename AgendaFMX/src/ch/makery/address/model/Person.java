@@ -8,12 +8,18 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
-/**
- * Model class for a Person.
- *
- * @author Marco Jakob
- */
+@Entity
+@Table(catalog = "openjpa", schema = "dbo")
+@NamedQueries({
+    @NamedQuery(name = "Alumno.seleccionaTodos", query = "SELECT a FROM Alumno a"),
+    @NamedQuery(name = "Alumno.seleccionaPorId", query = "SELECT a FROM Alumno a WHERE a.alumnoId = :alumnoId"),
+    @NamedQuery(name = "Alumno.seleccionaPorApellidos", query = "SELECT a FROM Alumno a WHERE a.apellidos = :apellidos")})
+
 public class Person {
 
 	private final StringProperty firstName;
