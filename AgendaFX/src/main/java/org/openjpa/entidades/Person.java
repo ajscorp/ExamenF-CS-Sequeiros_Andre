@@ -46,8 +46,8 @@ public class Person implements Serializable
     private final IntegerProperty postalCode;
     @Column(length = 10)
     private final StringProperty city;
-    @Temporal(TemporalType.TIMESTAMP)
-    private final ObjectProperty<LocalDate> birthday;
+//    @Temporal(TemporalType.TIMESTAMP)
+//    private final ObjectProperty<LocalDate> birthday;
 
     /**
      * Default constructor.
@@ -65,7 +65,7 @@ public class Person implements Serializable
             this.street = new SimpleStringProperty("some street");
             this.postalCode = new SimpleIntegerProperty(1234);
             this.city = new SimpleStringProperty("some city");
-            this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
+//            this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
     }
 
     public Integer getPersonId() {
@@ -136,17 +136,17 @@ public class Person implements Serializable
             return city;
     }
 
-    public LocalDate getBirthday() {
-            return birthday.get();
-    }
-
-    public void setBirthday(LocalDate birthday) {
-            this.birthday.set(birthday);
-    }
-
-    public ObjectProperty<LocalDate> birthdayProperty() {
-            return birthday;
-    }
+//    public LocalDate getBirthday() {
+//            return birthday.get();
+//    }
+//
+//    public void setBirthday(LocalDate birthday) {
+//            this.birthday.set(birthday);
+//    }
+//
+//    public ObjectProperty<LocalDate> birthdayProperty() {
+//            return birthday;
+//    }
         
     @Override
     public int hashCode() {

@@ -78,25 +78,25 @@ public class PersonOverviewController {
  * @param person the person or null
  */
     private void showPersonDetails(Person person) {
-        if (person != null) {
-            // Fill the labels with info from the person object.
-            firstNameLabel.setText(person.getFirstName());
-            lastNameLabel.setText(person.getLastName());
-            streetLabel.setText(person.getStreet());
-            postalCodeLabel.setText(Integer.toString(person.getPostalCode()));
-            cityLabel.setText(person.getCity());
-
-            birthdayLabel.setText(DateUtil.format(person.getBirthday()));
-            // birthdayLabel.setText(...);
-        } else {
-            // Person is null, remove all the text.
-            firstNameLabel.setText("");
-            lastNameLabel.setText("");
-            streetLabel.setText("");
-            postalCodeLabel.setText("");
-            cityLabel.setText("");
-            birthdayLabel.setText("");
-        }
+//        if (person != null) {
+//            // Fill the labels with info from the person object.
+//            firstNameLabel.setText(person.getFirstName());
+//            lastNameLabel.setText(person.getLastName());
+//            streetLabel.setText(person.getStreet());
+//            postalCodeLabel.setText(Integer.toString(person.getPostalCode()));
+//            cityLabel.setText(person.getCity());
+//
+//            birthdayLabel.setText(DateUtil.format(person.getBirthday()));
+//            // birthdayLabel.setText(...);
+//        } else {
+//            // Person is null, remove all the text.
+//            firstNameLabel.setText("");
+//            lastNameLabel.setText("");
+//            streetLabel.setText("");
+//            postalCodeLabel.setText("");
+//            cityLabel.setText("");
+//            birthdayLabel.setText("");
+//        }
     }
     /**
     * Called when the user clicks on the delete button.
