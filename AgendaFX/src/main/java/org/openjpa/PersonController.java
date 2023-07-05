@@ -1,4 +1,8 @@
-package org.openjpa.entidades;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package org.openjpa;
 
 import java.io.Serializable;
 import java.util.List;
@@ -6,15 +10,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.openjpa.control.exceptions.EntidadPreexistenteException;
-import org.openjpa.control.exceptions.NoExisteEntidadException;
+import org.openjpa.entidades.Person;
+import org.openjpa.exceptions.NonexistentEntityException;
 
-public class PersonControl implements Serializable {
+/**
+ *
+ * @author AJ
+ */
+public class PersonController implements Serializable {
 
-    public PersonControl(EntityManagerFactory emf) {
+    public PersonController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -22,19 +29,14 @@ public class PersonControl implements Serializable {
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
-    public int insertar(Person person) throws EntidadPreexistenteException {
+
+    public int create(Person person) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(person);
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (buscaPerson(person.getPersonId()) != null) {
-                throw new EntidadPreexistenteException("Person " + person + " ya existe en la base de datos.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -43,21 +45,19 @@ public class PersonControl implements Serializable {
         return person.getPersonId();
     }
 
-    public int editar(Person person) throws NoExisteEntidadException {
+    public void edit(Person person) throws NonexistentEntityException, Exception {
         EntityManager em = null;
-        int aux = 0;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             person = em.merge(person);
             em.getTransaction().commit();
-            aux = person.getPersonId();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
                 Integer id = person.getPersonId();
-                if (buscaPerson(id) == null) {
-                    throw new NoExisteEntidadException("El person con el id " + id + " no existe.");
+                if (findPerson(id) == null) {
+                    throw new NonexistentEntityException("The person with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -66,10 +66,9 @@ public class PersonControl implements Serializable {
                 em.close();
             }
         }
-        return aux;
     }
 
-    public void eliminar(Integer id) throws NoExisteEntidadException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -79,7 +78,7 @@ public class PersonControl implements Serializable {
                 person = em.getReference(Person.class, id);
                 person.getPersonId();
             } catch (EntityNotFoundException enfe) {
-                throw new NoExisteEntidadException("El person con el id " + id + " no existe.", enfe);
+                throw new NonexistentEntityException("The person with id " + id + " no longer exists.", enfe);
             }
             em.remove(person);
             em.getTransaction().commit();
@@ -90,17 +89,31 @@ public class PersonControl implements Serializable {
         }
     }
 
-    public List<Person> buscaPersons() {
+    public List<Person> findPersonEntities() {
+        return findPersonEntities(true, -1, -1);
+    }
+
+    public List<Person> findPersonEntities(int maxResults, int firstResult) {
+        return findPersonEntities(false, maxResults, firstResult);
+    }
+
+    private List<Person> findPersonEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
-            TypedQuery<Person> query = em.createNamedQuery("Person.seleccionaTodos", Person.class);
-            return query.getResultList();
+            CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
+            cq.select(cq.from(Person.class));
+            Query q = em.createQuery(cq);
+            if (!all) {
+                q.setMaxResults(maxResults);
+                q.setFirstResult(firstResult);
+            }
+            return q.getResultList();
         } finally {
             em.close();
         }
     }
 
-    public Person buscaPerson(Integer id) {
+    public Person findPerson(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Person.class, id);
@@ -109,7 +122,7 @@ public class PersonControl implements Serializable {
         }
     }
 
-    public int getTotalAlumno() {
+    public int getPersonCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
@@ -122,5 +135,4 @@ public class PersonControl implements Serializable {
         }
     }
     
-
 }

@@ -1,5 +1,6 @@
 package org.openjpa.entidades;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javafx.beans.property.IntegerProperty;
@@ -21,132 +22,133 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(catalog = "agendafmx", schema = "dbo")
+@Table(catalog = "openjpa", schema = "dbo")
 @NamedQueries({
     @NamedQuery(name = "Person.seleccionaTodos", query = "SELECT a FROM Person a"),
     @NamedQuery(name = "Person.seleccionaPorId", query = "SELECT a FROM Person a WHERE a.personId = :personId"),
     @NamedQuery(name = "Person.seleccionaPorApellidos", query = "SELECT a FROM Person a WHERE a.lastName = :lastName")})
 
-public class Person {
+public class Person implements Serializable
+{
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "person_id", nullable = false)
+    private Integer personId;
+    @Column(length = 20)
+    private final StringProperty firstName;
+    @Column(length = 40)
+    private final StringProperty lastName;
+    @Column(length = 40)
+    private final StringProperty street;
+    @Column
+    private final IntegerProperty postalCode;
+    @Column(length = 10)
+    private final StringProperty city;
+    @Temporal(TemporalType.TIMESTAMP)
+    private final ObjectProperty<LocalDate> birthday;
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Basic(optional = false)
-        @Column(name = "person_id", nullable = false)
-        private Integer personId;
-        @Column(length = 20)
-	private final StringProperty firstName;
-        @Column(length = 40)
-	private final StringProperty lastName;
-        @Column(length = 40)
-	private final StringProperty street;
-        @Column
-	private final IntegerProperty postalCode;
-        @Column(length = 10)
-	private final StringProperty city;
-        @Temporal(TemporalType.TIMESTAMP)
-	private final ObjectProperty<LocalDate> birthday;
+    /**
+     * Default constructor.
+     */
+    public Person() {
+            this(null, null);
+    }
 
-	/**
-	 * Default constructor.
-	 */
-	public Person() {
-		this(null, null);
-	}
-	
 
-	public Person(String firstName, String lastName) {
-		this.firstName = new SimpleStringProperty(firstName);
-		this.lastName = new SimpleStringProperty(lastName);
-		
-		// Some initial dummy data, just for convenient testing.
-		this.street = new SimpleStringProperty("some street");
-		this.postalCode = new SimpleIntegerProperty(1234);
-		this.city = new SimpleStringProperty("some city");
-		this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
-	}
+    public Person(String firstName, String lastName) {
+            this.firstName = new SimpleStringProperty(firstName);
+            this.lastName = new SimpleStringProperty(lastName);
 
-        public Integer getPersonId() {
-            return personId;
-        }
+            // Some initial dummy data, just for convenient testing.
+            this.street = new SimpleStringProperty("some street");
+            this.postalCode = new SimpleIntegerProperty(1234);
+            this.city = new SimpleStringProperty("some city");
+            this.birthday = new SimpleObjectProperty<LocalDate>(LocalDate.of(1999, 2, 21));
+    }
 
-        public void setPersonId(Integer personId) {
-            this.personId = personId;
-        }
-	
-	public String getFirstName() {
-		return firstName.get();
-	}
+    public Integer getPersonId() {
+        return personId;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName.set(firstName);
-	}
-	
-	public StringProperty firstNameProperty() {
-		return firstName;
-	}
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
+    }        
 
-	public String getLastName() {
-		return lastName.get();
-	}
+    public String getFirstName() {
+            return firstName.get();
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName.set(lastName);
-	}
-	
-	public StringProperty lastNameProperty() {
-		return lastName;
-	}
+    public void setFirstName(String firstName) {
+            this.firstName.set(firstName);
+    }
 
-	public String getStreet() {
-		return street.get();
-	}
+    public StringProperty firstNameProperty() {
+            return firstName;
+    }
 
-	public void setStreet(String street) {
-		this.street.set(street);
-	}
-	
-	public StringProperty streetProperty() {
-		return street;
-	}
+    public String getLastName() {
+            return lastName.get();
+    }
 
-	public int getPostalCode() {
-		return postalCode.get();
-	}
+    public void setLastName(String lastName) {
+            this.lastName.set(lastName);
+    }
 
-	public void setPostalCode(int postalCode) {
-		this.postalCode.set(postalCode);
-	}
-	
-	public IntegerProperty postalCodeProperty() {
-		return postalCode;
-	}
+    public StringProperty lastNameProperty() {
+            return lastName;
+    }
 
-	public String getCity() {
-		return city.get();
-	}
+    public String getStreet() {
+            return street.get();
+    }
 
-	public void setCity(String city) {
-		this.city.set(city);
-	}
-	
-	public StringProperty cityProperty() {
-		return city;
-	}
+    public void setStreet(String street) {
+            this.street.set(street);
+    }
 
-	public LocalDate getBirthday() {
-		return birthday.get();
-	}
+    public StringProperty streetProperty() {
+            return street;
+    }
 
-	public void setBirthday(LocalDate birthday) {
-		this.birthday.set(birthday);
-	}
-	
-	public ObjectProperty<LocalDate> birthdayProperty() {
-		return birthday;
-	}
+    public int getPostalCode() {
+            return postalCode.get();
+    }
+
+    public void setPostalCode(int postalCode) {
+            this.postalCode.set(postalCode);
+    }
+
+    public IntegerProperty postalCodeProperty() {
+            return postalCode;
+    }
+
+    public String getCity() {
+            return city.get();
+    }
+
+    public void setCity(String city) {
+            this.city.set(city);
+    }
+
+    public StringProperty cityProperty() {
+            return city;
+    }
+
+    public LocalDate getBirthday() {
+            return birthday.get();
+    }
+
+    public void setBirthday(LocalDate birthday) {
+            this.birthday.set(birthday);
+    }
+
+    public ObjectProperty<LocalDate> birthdayProperty() {
+            return birthday;
+    }
         
-        @Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (personId != null ? personId.hashCode() : 0);

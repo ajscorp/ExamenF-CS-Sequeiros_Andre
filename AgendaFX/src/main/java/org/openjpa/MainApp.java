@@ -25,7 +25,6 @@ import org.openjpa.control.PersonOverviewController;
 import org.openjpa.control.RootLayoutController;
 import org.openjpa.control.exceptions.EntidadPreexistenteException;
 import org.openjpa.entidades.Person;
-import org.openjpa.entidades.PersonControl;
 
 public class MainApp extends Application {
 
@@ -140,19 +139,15 @@ public class MainApp extends Application {
     public static void main(String[] args) {
         launch(args);
         Person person;
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AgendaPU");
-        PersonControl personControl = new PersonControl(emf);
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AgendaJPAPU");
+        PersonController personControl = new PersonController(emf);
         //Pedimos datos del autor
         String firstname = leerTexto("Introduce nombre: ");
         String lastname = leerTexto("Introduce apellidos: ");        
        
         person = new Person(firstname, lastname);
-        try {
-            // Lo añadimos a la BD
-            System.out.println("Identificador del autor: " + personControl.insertar(person));
-        } catch (EntidadPreexistenteException ex) {
-            Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Lo añadimos a la BD
+        System.out.println("Identificador del autor: " + personControl.create(person));
         
         
     }

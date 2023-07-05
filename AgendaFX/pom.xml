@@ -108,7 +108,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.1</version>
                 <configuration>
-                    <mainClass>org.openjpa.OpenJPA</mainClass> <!-- Reemplaza con tu clase principal -->
+                    <mainClass>org.openjpa.MainApp</mainClass> <!-- Reemplaza con tu clase principal -->
                 </configuration>
             </plugin>
         </plugins>
